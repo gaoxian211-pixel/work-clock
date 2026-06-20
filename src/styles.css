@@ -1,0 +1,285 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #111111;
+  background: #FBFCFC;
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #FBFCFC;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+.app-page::-webkit-scrollbar,
+.app-stage::-webkit-scrollbar,
+.device-frame::-webkit-scrollbar,
+.phone-shell::-webkit-scrollbar {
+  display: none;
+}
+
+.app-page {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: #FBFCFC;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  overscroll-behavior: none;
+}
+
+.app-stage {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.device-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.device-frame::before {
+  content: '';
+  display: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button:focus,
+input:focus {
+  outline: none;
+}
+
+.hairline-white {
+  border: 1px solid #ffffff;
+}
+
+.tap-surface {
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.tap-surface:active {
+  background: #ffffff;
+  transform: scale(0.86);
+}
+
+.solid-icon {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.solid-icon::before,
+.solid-icon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2.5px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.solid-icon-plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.solid-icon-minus::after {
+  display: none;
+}
+
+.solid-icon-x::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.solid-icon-x::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.solid-icon-close {
+  width: 16px;
+  height: 16px;
+}
+
+.solid-icon-close::before,
+.solid-icon-close::after {
+  width: 16px;
+  height: 2px;
+}
+
+.solid-icon-sm {
+  width: 12px;
+  height: 12px;
+}
+
+.solid-icon-sm::before,
+.solid-icon-sm::after {
+  width: 12px;
+  height: 2px;
+}
+
+.phone-shell::before {
+  content: none;
+}
+
+.phone-shell {
+  --ios-safe-top: 0px;
+  --ios-safe-bottom: 0px;
+  border: 0;
+  border-radius: 0;
+}
+
+.phone-shell::after {
+  content: none;
+}
+
+.mockup-only {
+  display: none !important;
+}
+
+.safe-header {
+  padding-top: calc(18px + env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: calc(36px + var(--ios-safe-bottom) + env(safe-area-inset-bottom));
+}
+
+.safe-top {
+  padding-top: calc(var(--ios-safe-top) + env(safe-area-inset-top));
+}
+
+.safe-sheet {
+  padding-bottom: calc(24px + var(--ios-safe-bottom) + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  .app-stage {
+    width: 393px;
+    height: 852px;
+    overflow: visible;
+  }
+
+  .device-frame {
+    width: 393px;
+    height: 852px;
+    overflow: visible;
+    border-radius: 58px;
+  }
+
+  .device-frame::before {
+    display: block;
+    position: absolute;
+    inset: -8px;
+    border-radius: 58px;
+    background: #111111;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      0 28px 70px rgba(17, 17, 17, 0.18);
+  }
+
+  .phone-shell {
+    --ios-safe-top: 22px;
+    --ios-safe-bottom: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.52);
+    border-radius: 50px;
+  }
+
+  .phone-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.46);
+    border-radius: inherit;
+  }
+
+  .mockup-only {
+    display: flex !important;
+  }
+
+  .safe-header {
+    padding-top: 18px;
+  }
+}
+
+@media (display-mode: standalone) {
+  .app-stage {
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .device-frame {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0;
+  }
+
+  .device-frame::before {
+    display: none;
+  }
+
+  .phone-shell {
+    --ios-safe-top: 0px;
+    --ios-safe-bottom: 0px;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .phone-shell::after {
+    content: none;
+  }
+
+  .mockup-only {
+    display: none !important;
+  }
+
+  .safe-header {
+    padding-top: calc(18px + env(safe-area-inset-top));
+  }
+}
