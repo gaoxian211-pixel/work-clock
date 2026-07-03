@@ -12,10 +12,10 @@ export default function SettingsSheet({ settings, onChange, onClose }) {
   };
 
   return (
-    <Sheet title="设置" onClose={onClose} height="h-[calc(246px+var(--ios-safe-bottom)+env(safe-area-inset-bottom))]">
+    <Sheet title="设置" onClose={onClose} height="h-[calc(374px+var(--ios-safe-bottom)+env(safe-area-inset-bottom))]">
       <div className="mt-1">
         <div className="flex h-14 items-center justify-between gap-4">
-          <div className="shrink-0 whitespace-nowrap text-body font-bold text-ink">工时目标</div>
+          <div className="shrink-0 whitespace-nowrap text-body font-semibold text-ink">工时目标</div>
           <div className="flex shrink-0 items-center gap-2.5">
             <RoundButton label="减少工时目标" icon="minus" onClick={() => setTarget(settings.targetHours - 0.5)} />
             <TargetValue value={settings.targetHours} onCommit={setTarget} />
@@ -26,25 +26,46 @@ export default function SettingsSheet({ settings, onChange, onClose }) {
         <div className="my-2 h-px bg-line" />
 
         <div className="flex h-14 items-center justify-between">
-          <div className="text-body font-bold text-ink">打卡提醒</div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={settings.reminderEnabled}
-            className={`relative h-[30px] w-[52px] rounded-pill transition-colors duration-200 ${
-              settings.reminderEnabled ? 'bg-ink' : 'bg-control-quiet'
-            }`}
-            onClick={() => onChange({ reminderEnabled: !settings.reminderEnabled })}
-          >
-            <span
-              className={`absolute left-0 top-1/2 h-[26px] w-[26px] -translate-y-1/2 rounded-pill bg-white shadow-thumb transition-transform duration-200 ${
-                settings.reminderEnabled ? 'translate-x-[24px]' : 'translate-x-[2px]'
-              }`}
-            />
-          </button>
+          <div className="text-body font-semibold text-ink">打卡提醒</div>
+          <SettingsSwitch
+            checked={settings.reminderEnabled}
+            label="打卡提醒"
+            onChange={() => onChange({ reminderEnabled: !settings.reminderEnabled })}
+          />
+        </div>
+
+        <div className="my-2 h-px bg-line" />
+
+        <div className="flex h-14 items-center justify-between">
+          <div className="text-body font-semibold text-ink">深色模式</div>
+          <SettingsSwitch
+            checked={settings.darkMode}
+            label="深色模式"
+            onChange={() => onChange({ darkMode: !settings.darkMode })}
+          />
         </div>
       </div>
     </Sheet>
+  );
+}
+
+function SettingsSwitch({ checked, label, onChange }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-label={label}
+      aria-checked={checked}
+      className="relative h-[30px] w-[52px] rounded-pill transition-colors duration-200"
+      style={{ backgroundColor: checked ? 'var(--color-switch-on)' : 'var(--color-switch-off)' }}
+      onClick={onChange}
+    >
+      <span
+        className={`absolute left-0 top-1/2 h-[26px] w-[26px] -translate-y-1/2 rounded-pill bg-switch-thumb shadow-thumb transition-transform duration-200 ${
+          checked ? 'translate-x-[24px]' : 'translate-x-[2px]'
+        }`}
+      />
+    </button>
   );
 }
 
@@ -53,9 +74,9 @@ function RoundButton({ label, icon, onClick }) {
     <motion.button
       type="button"
       aria-label={label}
-      className="tap-surface grid h-8 w-8 place-items-center rounded-pill border border-line bg-shell text-ink"
+      className="tap-surface grid h-8 w-8 place-items-center rounded-pill border border-line bg-small-button text-ink"
       onClick={onClick}
-      whileTap={{ scale: 0.84, backgroundColor: '#ffffff' }}
+      whileTap={{ scale: 0.84 }}
       transition={pressTransition}
     >
       <span className={`solid-icon solid-icon-sm ${icon === 'plus' ? 'solid-icon-plus' : 'solid-icon-minus'}`} />
@@ -94,7 +115,7 @@ function TargetValue({ value, onCommit }) {
       <input
         ref={inputRef}
         aria-label="工时目标"
-        className="h-8 w-12 bg-transparent text-center text-body font-bold text-ink outline-none"
+        className="h-8 w-12 bg-transparent text-center text-body font-semibold text-ink outline-none"
         inputMode="decimal"
         value={draft}
         min="0"
@@ -114,7 +135,7 @@ function TargetValue({ value, onCommit }) {
     <button
       type="button"
       aria-label="工时目标"
-      className="relative h-8 w-12 overflow-hidden text-center text-body font-bold text-ink"
+      className="relative h-8 w-12 overflow-hidden text-center text-body font-semibold text-ink"
       onClick={() => setEditing(true)}
     >
       <RollingValue previousValue={previousValue} value={value} />

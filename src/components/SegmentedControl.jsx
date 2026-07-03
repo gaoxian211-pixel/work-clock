@@ -8,7 +8,7 @@ const options = [
 
 export default function SegmentedControl({ value, onChange }) {
   return (
-    <div className="grid h-segment grid-cols-3 rounded-control border border-line-light bg-control p-1">
+    <div className="grid h-segment grid-cols-3 rounded-control bg-control p-1">
       {options.map((option) => (
         <button
           key={option.value}
@@ -19,7 +19,7 @@ export default function SegmentedControl({ value, onChange }) {
           {value === option.value && (
             <motion.span
               layoutId="segment-pill"
-              className="absolute inset-0 rounded-controlInner border border-line-light bg-shell shadow-control"
+              className="absolute inset-0 rounded-controlInner bg-[var(--color-segment-thumb)] shadow-control"
               transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
             />
           )}

@@ -3,13 +3,89 @@
 @tailwind utilities;
 
 :root {
-  color: #111111;
-  background: #FBFCFC;
+  --color-canvas: #FBFCFC;
+  --color-shell: #FBFCFC;
+  --color-sheet: #FBFCFC;
+  --color-surface: #FBFCFC;
+  --color-scrim: rgba(17, 17, 17, 0.42);
+  --color-ink: #111111;
+  --color-inverse: #ffffff;
+  --color-muted: #999999;
+  --color-subtle: #999999;
+  --color-disabled: #999999;
+  --color-hairline: #F2F4F7;
+  --color-line: #F2F4F7;
+  --color-line-light: rgba(255, 255, 255, 0.52);
+  --color-control: #F5F6F7;
+  --color-control-soft: #ffffff;
+  --color-control-quiet: #E6E7EB;
+  --color-icon-button: #ffffff;
+  --color-small-button: #FBFCFC;
+  --color-segment-thumb: #FBFCFC;
+  --color-switch-on: #33B773;
+  --color-switch-thumb: #ffffff;
+  --color-switch-off: #E6E7EB;
+  --color-success-soft: #E9F5EE;
+  --color-success-strong: #33B773;
+  --color-danger-soft: #FAF0F0;
+  --color-danger-strong: #E44545;
+  --color-empty-soft: #F5F6F7;
+  --color-empty-strong: #B9B9B9;
+  --color-placeholder: #B8B8B8;
+  --color-clear: #ECEEF1;
+  --color-progress-track: #F2F4F7;
+  --color-progress-ring: #111111;
+  --color-button-pressed: #ffffff;
+  --color-overlay-text: #ffffff;
+  --color-segment-border: rgba(17, 17, 17, 0.035);
+  --shadow-soft-button: 0 20px 48px rgba(17, 17, 17, 0.12);
+  color: var(--color-ink);
+  background: var(--color-canvas);
   color-scheme: light;
   font-synthesis: none;
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme='dark'] {
+  --color-canvas: #0F0F0F;
+  --color-shell: #0F0F0F;
+  --color-sheet: #171717;
+  --color-surface: #171717;
+  --color-scrim: rgba(0, 0, 0, 0.58);
+  --color-ink: #F5F5F5;
+  --color-inverse: #111111;
+  --color-muted: #8E8E93;
+  --color-subtle: #8E8E93;
+  --color-disabled: #727277;
+  --color-hairline: rgba(245, 245, 245, 0.06);
+  --color-line: rgba(245, 245, 245, 0.06);
+  --color-line-light: rgba(245, 245, 245, 0.08);
+  --color-control: rgba(255, 255, 255, 0.04);
+  --color-control-soft: #F5F5F5;
+  --color-control-quiet: rgba(255, 255, 255, 0.04);
+  --color-icon-button: rgba(255, 255, 255, 0.04);
+  --color-small-button: rgba(255, 255, 255, 0.06);
+  --color-segment-thumb: rgba(255, 255, 255, 0.06);
+  --color-switch-on: #33B773;
+  --color-switch-thumb: #F5F5F5;
+  --color-switch-off: rgba(255, 255, 255, 0.06);
+  --color-success-soft: #173426;
+  --color-success-strong: #42C985;
+  --color-danger-soft: #3A2020;
+  --color-danger-strong: #F06A6A;
+  --color-empty-soft: rgba(255, 255, 255, 0.04);
+  --color-empty-strong: #6F6F73;
+  --color-placeholder: #747478;
+  --color-clear: #303033;
+  --color-progress-track: rgba(255, 255, 255, 0.04);
+  --color-progress-ring: rgba(245, 245, 245, 0.9);
+  --color-button-pressed: rgba(245, 245, 245, 0.12);
+  --color-overlay-text: #F5F5F5;
+  --color-segment-border: rgba(245, 245, 245, 0.04);
+  --shadow-soft-button: 0 18px 44px rgba(0, 0, 0, 0.38);
+  color-scheme: dark;
 }
 
 * {
@@ -28,7 +104,7 @@ body,
 body {
   margin: 0;
   overflow: hidden;
-  background: #FBFCFC;
+  background: var(--color-canvas);
   overscroll-behavior: none;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -50,7 +126,7 @@ body::-webkit-scrollbar,
   width: 100vw;
   height: 100dvh;
   overflow: hidden;
-  background: #FBFCFC;
+  background: var(--color-canvas);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,7 +165,7 @@ input:focus {
 }
 
 .hairline-white {
-  border: 1px solid #ffffff;
+  border: 1px solid var(--color-line-light);
 }
 
 .tap-surface {
@@ -99,8 +175,19 @@ input:focus {
 }
 
 .tap-surface:active {
-  background: #ffffff;
-  transform: scale(0.86);
+  background: var(--color-button-pressed);
+}
+
+.heatmap-bubble-dark {
+  display: none;
+}
+
+[data-theme='dark'] .heatmap-bubble-light {
+  display: none;
+}
+
+[data-theme='dark'] .heatmap-bubble-dark {
+  display: block;
 }
 
 .solid-icon {
@@ -172,6 +259,30 @@ input:focus {
   border-radius: 0;
 }
 
+.home-environment-glow {
+  position: absolute;
+  z-index: 0;
+  right: -12%;
+  bottom: -5%;
+  left: -12%;
+  height: 58%;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      ellipse at bottom,
+      rgba(56, 189, 248, 0.26) 0%,
+      rgba(45, 184, 196, 0.14) 30%,
+      rgba(17, 17, 17, 0) 68%
+    );
+  filter: blur(24px);
+  transform: translateZ(0);
+}
+
+[data-theme='dark'] .home-environment-glow {
+  opacity: 1;
+}
+
 .phone-shell::after {
   content: none;
 }
@@ -194,6 +305,21 @@ input:focus {
 
 .safe-sheet {
   padding-bottom: calc(24px + var(--ios-safe-bottom) + env(safe-area-inset-bottom));
+}
+
+.app-sheet {
+  background: var(--color-sheet);
+}
+
+[data-theme='dark'] .app-sheet {
+  background: rgba(23, 23, 23, 0.88);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+.sheet-root {
+  position: fixed;
+  inset: 0;
 }
 
 @media (min-width: 768px) and (hover: hover) and (pointer: fine) {
@@ -237,12 +363,31 @@ input:focus {
     border-radius: inherit;
   }
 
+  [data-theme='dark'] .device-frame::before {
+    box-shadow:
+      inset 0 0 0 1px rgba(245, 245, 245, 0.18),
+      0 28px 70px rgba(0, 0, 0, 0.38);
+  }
+
+  [data-theme='dark'] .phone-shell {
+    border-color: rgba(245, 245, 245, 0.12);
+  }
+
+  [data-theme='dark'] .phone-shell::after {
+    border-color: rgba(245, 245, 245, 0.1);
+  }
+
   .mockup-only {
     display: flex !important;
   }
 
   .safe-header {
     padding-top: 18px;
+  }
+
+  .sheet-root {
+    position: absolute;
+    inset: 0;
   }
 }
 
@@ -281,5 +426,10 @@ input:focus {
 
   .safe-header {
     padding-top: calc(18px + env(safe-area-inset-top));
+  }
+
+  .sheet-root {
+    position: fixed;
+    inset: 0;
   }
 }

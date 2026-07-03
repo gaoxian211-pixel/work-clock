@@ -80,7 +80,7 @@ export const getWeekCards = (year, monthIndex, records, targetHours) => {
       start: weekStart,
       isCurrent: weekStart.getTime() === currentWeekStart.getTime(),
     };
-  }).filter((week) => week.start <= cleanToday);
+  });
 };
 
 export const getMonthCards = (year, records, targetHours) => {
@@ -107,12 +107,12 @@ export const getMonthCards = (year, records, targetHours) => {
     const average = daysWithRecords ? Math.round(minutes / daysWithRecords) : 0;
 
     return {
-      month: `${monthIndex + 1}月`,
+      month: `${monthIndex + 1}\u2009月`,
       minutes: average,
       label: average ? formatHourLabel(average) : '—',
       tone: getTone(average, targetHours),
       start: monthStart,
       isCurrent: monthStart.getTime() === currentMonthStart.getTime(),
     };
-  }).filter((month) => month.start <= currentMonthStart);
+  });
 };

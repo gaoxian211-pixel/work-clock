@@ -33,8 +33,8 @@ export default function RecordSheet({ records, targetHours, editingRecordKey, on
   const [view, setView] = useState('day');
   const [cursor, setCursor] = useState(new Date(now.getFullYear(), now.getMonth(), 1));
 
-  const title = view === 'month' ? `${cursor.getFullYear()}年` : monthName(cursor);
-  const sheetHeight = 'h-[76%]';
+  const title = view === 'month' ? `${cursor.getFullYear()}\u2009年` : monthName(cursor);
+  const sheetHeight = 'h-[80%]';
   const canNext = view === 'month'
     ? cursor.getFullYear() < now.getFullYear()
     : !isFutureDate(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1));
@@ -58,7 +58,7 @@ export default function RecordSheet({ records, targetHours, editingRecordKey, on
         <button type="button" className="grid h-8 w-8 place-items-center text-muted" onClick={() => changeCursor(-1)}>
           <ChevronLeft size={20} strokeWidth={2.2} />
         </button>
-        <div className="min-w-[96px] text-center text-monthNav font-medium text-ink">{title}</div>
+        <div className="min-w-[96px] text-center text-monthNav font-normal text-ink">{title}</div>
         <button
           type="button"
           className={`grid h-8 w-8 place-items-center ${canNext ? 'text-disabled' : 'text-control-quiet'}`}
@@ -72,7 +72,7 @@ export default function RecordSheet({ records, targetHours, editingRecordKey, on
       <div className="relative mt-8 h-[392px] overflow-visible">
         <motion.div
           key={view}
-          className="absolute -top-8 bottom-0 left-0 right-0 bg-sheet"
+          className="absolute -top-8 bottom-0 left-0 right-0"
           initial={{ opacity: 0.96 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}

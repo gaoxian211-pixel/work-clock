@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import HomePage from './components/HomePage.jsx';
 import RecordSheet from './components/RecordSheet.jsx';
@@ -23,25 +23,77 @@ export default function App() {
     return scheduleWorkdayReminders(state.settings.reminderTimes || WORKDAY_REMINDER_TIMES);
   }, [state.settings.reminderEnabled, state.settings.reminderTimes]);
 
+  useLayoutEffect(() => {
+    const hasOverlay = Boolean(activeSheet || editKey);
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    const isDark = state.settings.darkMode;
+    const pageColor = isDark ? '#0F0F0F' : '#FBFCFC';
+    const nextColor = hasOverlay ? (isDark ? '#080808' : '#9A9B9B') : pageColor;
+
+    document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+
+    if (themeMeta) {
+      themeMeta.setAttribute('content', nextColor);
+    }
+    document.documentElement.style.background = nextColor;
+    document.body.style.background = nextColor;
+
+    return () => {
+      if (themeMeta) themeMeta.setAttribute('content', pageColor);
+      document.documentElement.style.background = pageColor;
+      document.body.style.background = pageColor;
+    };
+  }, [activeSheet, editKey, state.settings.darkMode]);
+
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 30000);
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    let midnightTimer;
+
+    const syncNow = () => setNow(new Date());
+    const scheduleMidnightSync = () => {
+      const current = new Date();
+      const nextMidnight = new Date(current);
+      nextMidnight.setHours(24, 0, 0, 80);
+
+      midnightTimer = window.setTimeout(() => {
+        syncNow();
+        scheduleMidnightSync();
+      }, nextMidnight.getTime() - current.getTime());
+    };
+
+    const syncWhenVisible = () => {
+      if (document.visibilityState === 'visible') syncNow();
+    };
+
+    scheduleMidnightSync();
+    window.addEventListener('focus', syncNow);
+    document.addEventListener('visibilitychange', syncWhenVisible);
+
+    return () => {
+      window.clearTimeout(midnightTimer);
+      window.removeEventListener('focus', syncNow);
+      document.removeEventListener('visibilitychange', syncWhenVisible);
+    };
   }, []);
 
   const todayKey = useMemo(() => getTodayKey(now), [now]);
   const todayRecord = state.records[todayKey];
 
   const handleClock = () => {
-    const now = getNowTime();
+    const currentTime = getNowTime();
     setState((current) => {
       const record = current.records[todayKey];
       const records = { ...current.records };
 
       if (!record?.firstIn) {
-        records[todayKey] = { firstIn: now, lastOut: null };
+        records[todayKey] = { firstIn: currentTime, lastOut: null };
       } else {
         const start = toMinutes(record.firstIn);
-        const end = Math.min(1439, Math.max(toMinutes(record.lastOut), toMinutes(now), start + 1));
+        const end = Math.min(1439, Math.max(toMinutes(record.lastOut), toMinutes(currentTime), start + 1));
         const safeNow = `${pad(Math.floor(end / 60))}:${pad(end % 60)}`;
         records[todayKey] = normalizeWorkRecord({ ...record, lastOut: safeNow });
       }
@@ -88,10 +140,12 @@ export default function App() {
       <div className="app-stage">
         <div className="device-frame">
           <div className="phone-shell relative h-full w-full overflow-hidden border border-line-light bg-shell shadow-phone">
+            <div className="home-environment-glow" aria-hidden="true" />
             <HomePage
               record={todayRecord}
               now={now}
               targetHours={state.settings.targetHours}
+              isDark={state.settings.darkMode}
               onClock={handleClock}
               onEditTime={() => setEditKey(todayKey)}
               onOpenRecords={() => setActiveSheet('records')}

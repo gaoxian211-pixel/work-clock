@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import bubbleImage from '../assets/bubble.svg';
+import bubbleDarkImage from '../assets/bubble-dark.svg';
 import { getDayMeta, getMonthDays, toneClasses } from '../lib/records.js';
 import { getTodayKey } from '../lib/time.js';
 
@@ -8,7 +9,7 @@ const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
 
 export function DayWeekdayHeader() {
   return (
-    <div className="relative -top-3 mb-0 grid grid-cols-7 gap-1.5 text-center text-label font-medium text-ink">
+    <div className="relative -top-3 mb-0 grid grid-cols-7 gap-1.5 text-center text-label font-normal text-ink">
       {weekdays.map((day) => (
         <span key={day}>{day}</span>
       ))}
@@ -63,7 +64,7 @@ export default function DayHeatmap({ cursor, records, targetHours, editingRecord
                 {selectedKey === key && (
                   <motion.div
                     data-heatmap-bubble
-                    className="absolute bottom-[calc(100%+2px)] left-1/2 z-20 h-[53px] w-[88px] -translate-x-1/2 text-left text-micro font-medium leading-[1.45] text-white"
+                    className="absolute bottom-[calc(100%+2px)] left-1/2 z-20 h-[53px] w-[88px] -translate-x-1/2 text-left text-micro font-normal leading-[1.45] text-[var(--color-overlay-text)]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -73,8 +74,19 @@ export default function DayHeatmap({ cursor, records, targetHours, editingRecord
                       onEditRecord?.(key);
                     }}
                   >
-                    <img src={bubbleImage} alt="" className="absolute inset-0 h-full w-full rotate-180" draggable="false" />
-                    <div className="relative mx-auto flex h-full w-max flex-col items-start justify-center gap-0.5 pb-[6px]">
+                    <img
+                      src={bubbleImage}
+                      alt=""
+                      className="heatmap-bubble-light absolute inset-0 h-full w-full rotate-180"
+                      draggable="false"
+                    />
+                    <img
+                      src={bubbleDarkImage}
+                      alt=""
+                      className="heatmap-bubble-dark absolute inset-0 h-full w-full rotate-180"
+                      draggable="false"
+                    />
+                    <div className="relative mx-auto flex h-full w-max translate-y-px flex-col items-start justify-center gap-0.5 pb-[6px]">
                       <div className="whitespace-nowrap">最早：{firstIn}</div>
                       <div className="whitespace-nowrap">最晚：{lastOut}</div>
                     </div>
@@ -82,10 +94,10 @@ export default function DayHeatmap({ cursor, records, targetHours, editingRecord
                 )}
               </AnimatePresence>
               <div className="flex flex-col items-center justify-center gap-1">
-                <div className={`${isToday ? 'text-tileToday' : 'text-body'} font-medium leading-none text-ink`}>
+                <div className="text-tileToday font-normal leading-none text-ink">
                   {isToday ? '今' : date.getDate()}
                 </div>
-                <div className="h-3 text-micro font-medium leading-none">
+                <div className="h-3 text-caption font-normal leading-none">
                   {meta.tone === 'empty' ? '' : meta.label}
                 </div>
               </div>

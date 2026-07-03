@@ -27,7 +27,7 @@ export const formatDuration = (minutes) => {
 
 export const formatHourLabel = (minutes) => {
   if (!minutes) return '—';
-  return `${Math.max(1, Math.round(minutes / 60))}h`;
+  return `${Math.max(1, Math.round(minutes / 60))}\u2009h`;
 };
 
 export const getRecordMinutes = (record, now = new Date()) => {
@@ -41,7 +41,7 @@ export const addDays = (date, days) => {
   return next;
 };
 
-export const monthName = (date) => `${date.getFullYear()}年${date.getMonth() + 1}月`;
+export const monthName = (date) => `${date.getFullYear()}\u2009年\u2009${date.getMonth() + 1}\u2009月`;
 
 export const isFutureDate = (date) => {
   const today = new Date();

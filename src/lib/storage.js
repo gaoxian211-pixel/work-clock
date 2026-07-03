@@ -26,6 +26,7 @@ export const defaultState = {
     targetHours: 8,
     reminderEnabled: true,
     reminderTimes: WORKDAY_REMINDER_TIMES,
+    darkMode: false,
   },
 };
 
@@ -42,7 +43,7 @@ export const normalizeWorkRecord = (record) => {
   const lastOut = isValidTime(record.lastOut) ? record.lastOut : null;
 
   if (!firstIn && !lastOut) return null;
-  if (!firstIn) return { firstIn: lastOut, lastOut: null };
+  if (!firstIn) return { firstIn: null, lastOut };
   if (!lastOut) return { firstIn, lastOut: null };
 
   return toMinutes(lastOut) < toMinutes(firstIn)
@@ -75,6 +76,9 @@ const normalizeSettings = (settings) => {
       ? settings.reminderEnabled
       : defaultState.settings.reminderEnabled,
     reminderTimes: reminderTimes.length ? reminderTimes : defaultState.settings.reminderTimes,
+    darkMode: typeof settings?.darkMode === 'boolean'
+      ? settings.darkMode
+      : defaultState.settings.darkMode,
   };
 };
 
