@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import bubbleImage from '../assets/bubble.svg';
 import bubbleDarkImage from '../assets/bubble-dark.svg';
 import { getDayMeta, getMonthDays, toneClasses } from '../lib/records.js';
@@ -21,13 +21,15 @@ export default function DayHeatmap({ cursor, records, targetHours, editingRecord
   const days = getMonthDays(cursor.getFullYear(), cursor.getMonth());
   const todayKey = getTodayKey();
   const [selectedKey, setSelectedKey] = useState(null);
+  const closedPointerCellRef = useRef(null);
 
   useEffect(() => {
     if (!selectedKey) return undefined;
 
     const closeOnBlank = (event) => {
       if (editingRecordKey === selectedKey) return;
-      if (event.target.closest('[data-heatmap-cell], [data-heatmap-bubble]')) return;
+      if (event.target.closest('[data-heatmap-bubble]')) return;
+      closedPointerCellRef.current = event.target.closest('[data-heatmap-cell]')?.dataset.heatmapKey || null;
       setSelectedKey(null);
     };
 
@@ -53,10 +55,16 @@ export default function DayHeatmap({ cursor, records, targetHours, editingRecord
             <button
               type="button"
               data-heatmap-cell
+              data-heatmap-key={key}
               key={key}
               className={`relative grid aspect-square w-full place-items-center rounded-[8px] text-center ${toneClasses[meta.tone]}`}
               onClick={(event) => {
                 event.stopPropagation();
+                if (closedPointerCellRef.current === key) {
+                  closedPointerCellRef.current = null;
+                  return;
+                }
+                if (meta.isFuture) return;
                 setSelectedKey((current) => (current === key ? null : key));
               }}
             >

@@ -70,9 +70,9 @@ export default function WorkTimeDisplay({ minutes, targetHours, hasRecord = true
 
       {hasRecord ? (
         <div className="relative flex items-baseline justify-center text-center font-sans text-ink [font-variant-numeric:tabular-nums]">
-          <span className="text-[56px] font-medium leading-none">{displayHours}</span>
+          <span className="text-[56px] leading-none [font-weight:550]">{displayHours}</span>
           <span className="ml-1 text-[28px] font-normal leading-none">h</span>
-          <span className="ml-[14px] text-[56px] font-medium leading-none">{displayMinutes}</span>
+          <span className="ml-[14px] text-[56px] leading-none [font-weight:550]">{displayMinutes}</span>
           <span className="ml-1 text-[28px] font-normal leading-none">m</span>
         </div>
       ) : (
