@@ -103,6 +103,7 @@ body,
 
 body {
   margin: 0;
+  padding-top: env(safe-area-inset-top);
   overflow: hidden;
   background: var(--color-canvas);
   overscroll-behavior: none;
